@@ -1,0 +1,28 @@
+version: '3.2'
+services:
+  app:
+    build: './dockerfiles/geodjango'
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+    volumes:
+      - type: bind
+        source: /home/cactus/Devel/GIS/dockerfiles/geodjango/tpfinal
+        target: /app/tpfinal
+  db:
+    build: './dockerfiles/postgis'
+    container_name: pg01
+    environment:
+      POSTGRES_PASS: mypassword
+
+  qgisserver:
+    image: kartoza/qgis-server:2.18.10
+    hostname: qgis-server
+    links:
+      - db:db
+    ports:
+      - "9999:80"
+    
+volumes:
+  tpfinal:

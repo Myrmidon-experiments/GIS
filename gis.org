@@ -1,0 +1,43 @@
+#GIS TAREAS
+
+* Tasks
+** DONE Levantar instancia de postgres + postgis (docker)
+   Instalar docker-compose y luego
+   - docker-compose build (GIS/docker-compose.yml)
+   - docker-compose up
+** DONE Conectar una carpeta mediante volumenes (docker)
+** DONE Configurar docker compose para juntar los dos contenedores
+** DONE Setear un proyecto GeoDjango (docker)
+   - Setearlo localmante
+   - Permitir la modificación local y que se vean los cambios en el container
+** DONE Importar base de datos desde el dump alojado en GitHub
+   - Hacerlo desde una imagen docker de postgres
+** DONE Conectar base de datos (en docker) a un proyecto GeoDjango
+** DONE Generar modelos a partir de base de datos existente
+** DONE Crear un tercer dockerfile para qgis-server
+** IN-PROGRESS Consultas (punto y rectangulo) via geoJSON con django
+   - Hacer una vista que reciba *layer* y *wkt* y devuelva un json con la consulta
+** IN-PROGRESS Crear tabla para editar desde la web (CRUD)
+   - Crear una tabla con geometría PUNTO
+   - Hacer una vista que reciba los puntos realizados en la capa y los guarde en la capa anterior
+* Practico
+** TODO Implementar un servidor de BD espaciales y cargar capas
+** TODO Implementar un servidor de mapas (qgis-server)
+   - Obtener el archivo de la maquina virtual (proyecto qgs)
+   - Crear un dockerfile para esta función
+** TODO Implemetar servicios OGC (WMS Y WFS).
+   - 2 formatos de imagen
+   - 2 proyecciones (4326, 22175)
+** TODO App web que disponga como mínimo de las sig. funcionalidades
+   - [ ] Navegación del mapa (paneo, zoom, etc)
+   - [ ] Activar/Desactivar capas
+   - [ ] Mostrar leyenda de capas y escala de visualización
+   - [ ] Consulta gráfica (punto y rectangulo) para cada capa
+   - [ ] Medición de distancias
+   - [ ] Ingresar elementos en una capa vectorial
+** TODO Realizar simbologia en las siguientes capas
+   - [ ] Espejos_de_Agua
+   - [ ] Red vial
+   - [ ] Veg. Cultivos
+   - [ ] Veg. Arborea
+   - [ ] Veg. Hidrófila

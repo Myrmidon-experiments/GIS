@@ -1,0 +1,550 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Trabajo Práctico Integrador de SIG</title>
+
+    <!-- Bootstrap Core CSS -->
+    <!-- <link href="../vendor/bootstrap/css/bootstrap.css" rel="stylesheet"> -->
+    <link href="{% static 'staticfilesjosi/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <!-- <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet"> -->
+    <link href="{% static 'staticfilesjosi/vendor/metisMenu/metisMenu.min.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <!-- <link href="../dist/css/sb-admin-2.css" rel="stylesheet"> -->
+    <link href="{% static 'staticfilesjosi/dist/css/sb-admin-2.css' %}" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <!-- <link href="../vendor/morrisjs/morris.css" rel="stylesheet"> -->
+    <link href="{% static 'staticfilesjosi/vendor/morrisjs/morris.css' %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link href="{% static 'staticfilesjosi/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+
+    <!-- Open layer sources-->
+    <script src="https://openlayers.org/en/v4.5.0/build/ol.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.5.0/css/ol.css" type="text/css">
+
+    
+</head>
+
+
+<script type="text/javascript">
+ var capasdelmapa=[];
+ var capas = [
+     {tipo: 'politico',layer:'provincias',nombre:'Provincias'},
+     {tipo: 'politico',layer:'pais_lim',nombre:'Limites del Pais'},
+     {tipo: 'actividades',layer:'actividades_agropecuarias',nombre:'Actividades Agropecuarias'},
+     {tipo: 'actividades',layer:'actividades_economicas',nombre:'Actividades Economicas'},
+     {tipo: 'infraestructura',layer:'complejo_de_energia_ene',nombre:'Complejos de Energia'},
+     {tipo: 'infraestructura',layer:'lineas_de_conducción_ene',nombre:'Lineas de Conducción energ.'},
+     {tipo: 'infraestructura',layer:'estructuras_portuarias',nombre:'Estructuras Portuarias'},
+     {tipo: 'infraestructura',layer:'edif_depor_y_esparcimiento',nombre:'Edificaciones Deportivas'},
+     {tipo: 'infraestructura',layer:'edif_construcciones_turisticas',nombre:'Edificaciones Turisticas'},
+     {tipo: 'infraestructura',layer:'edif_educacion',nombre:'Edificaciones Educativas'},
+     {tipo: 'infraestructura',layer:'edif_religiosos',nombre:'Edificaciones Religiosas'},
+     {tipo: 'infraestructura',layer:'infraestructura_aeroportuaria_punto',nombre:'Infraestructuras Aeroportuarias'},
+     {tipo: 'infraestructura',layer:'infraestructura_hidro',nombre:'Infraestructuras Hidricas'},
+     {tipo: 'infraestructura',layer:'edificio_de_salud_ips',nombre:'Edificios de Salud IPS'},
+     {tipo: 'politico',layer:'localidades',nombre:'Localidades'},
+     {tipo: 'infraestructura',layer:'edificio_de_seguridad_ips',nombre:'Edificios de Seguridad IPS'},
+     {tipo: 'infraestructura',layer:'obra_portuaria',nombre:'Obras Portuarias'},
+     {tipo: 'infraestructura',layer:'edificio_publico_ips',nombre:'Edificios Publicos IPS'},
+     {tipo: 'infraestructura',layer:'edificios_ferroviarios',nombre:'Edificios Ferroviarios'},
+     {tipo: 'infraestructura',layer:'obra_de_comunicación',nombre:'Obra de Comunicación'},
+     {tipo: 'vial',layer:'salvado_de_obstaculo',nombre:'Salvado de Obstaculo'},
+     {tipo: 'vial',layer:'marcas_y_senales',nombre:'Marcas y Señales'},
+     {tipo: 'vial',layer:'señalizaciones',nombre:'Señalizaciones'},
+     {tipo: 'infraestructura',layer:'puente_red_vial_puntos',nombre:'Puentes de Redes Viales'},
+     {tipo: 'suelos',layer:'puntos_de_alturas_topograficas',nombre:'Puntos de Altura'},
+     {tipo: 'infraestructura',layer:'otras_edificaciones',nombre:'Otras Edificaciones'},
+     {tipo: 'infraestructura',layer:'muro_embalse',nombre:'Muro de Embalse'},
+     {tipo: 'vial',layer:'curvas_de_nivel',nombre:'Curvas de Nivel'},
+     {tipo: 'hidrico',layer:'curso_de_agua_hid',nombre:'Cursos de Agua'},
+     {tipo: 'politico',layer:'limite_politico_administrativo_lim',nombre:'Limite Politico'},
+     {tipo: 'vial',layer:'vias_secundarias',nombre:'Vias Secundarias'},
+     {tipo: 'vial',layer:'red_ferroviaria',nombre:'Red Ferroviaria'},
+     {tipo: 'vial',layer:'red_vial',nombre:'Red Vial'},
+     {tipo: 'suelos',layer:'sue_congelado',nombre:'Suelo Congelado'},
+     {tipo: 'suelos',layer:'isla',nombre:'Isla'},
+     
+     
+     {tipo: 'suelos',layer:'puntos_del_terreno',nombre:'Puntos del Terreno'},
+     {tipo: 'suelos',layer:'sue_consolidado',nombre:'Suelo Consolidado'},
+     {tipo: 'hidrico',layer:'espejo_de_agua_hid',nombre:'Espejos de Agua'},
+     {tipo: 'actividades',layer:'ejido',nombre:'Ejido'},
+     {tipo: 'suelos',layer:'sue_costero',nombre:'Suelo Costero'},
+     {tipo: 'suelos',layer:'sue_hidromorfologico',nombre:'Suelo Hidromorfologico'},
+     {tipo: 'suelos',layer:'sue_no_consolidado',nombre:'Suelo no Consolidado'},
+     {tipo: 'vegetacion',layer:'veg_arborea',nombre:'Vegetacion Arborea'},
+     {tipo: 'vegetacion',layer:'veg_arbustiva',nombre:'Vegetacion Arbustiva'},
+     {tipo: 'vegetacion',layer:'veg_cultivos',nombre:'Cultivos'},
+     {tipo: 'vegetacion',layer:'veg_hidrofila',nombre:'Vegetacion Hidrofila'},
+     {tipo: 'vegetacion',layer:'veg_suelo_desnudo',nombre:'Suelo Desnudo'},
+ ]
+</script>
+
+<body>
+
+    <div class="container-fluid">
+        <nav class="sidebar" style="margin-top: 60px; bottom: 0px; margin-bottom: 0px; height: 100%; overflow-y: auto; left: 0px;">
+            <div class="navbar-default sidebar" id="leyendasStyle" role="navigation">
+                <div class="sidebar-nav">
+                    <ul class="nav" id="leyendas" hidden="true">
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container-fluid">
+        <nav class="sidebar" style="top: 0px; margin-top: 0px; height: 100%; overflow-y: auto; right: 0px;">
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <select id="controles" class="form-control btn btn-info" onchange="seleccionarControl(this.value);">
+                            <option id="navegar" selected="selected" value="navegar" onclick="quitarCamposCapa();">Navegar</option>
+                            <option id="consultar" value="consultar" onclick="quitarCamposCapa();">Consultar</option>
+                            <option id="dibujarPunto" value="dibujarPunto" onclick="cargarCamposCapa(this.value);">Dibujar Punto</option>
+                            <option id="dibujarPoly" value="dibujarPoly" onclick="cargarCamposCapa(this.value);">Dibujar Polígono</option>
+                        </select>
+
+                        <li>
+                            <div id="contenidoCampos" style="text-align: center; display: none" >
+                                <label>Campo 1</label>
+                                <input type="text" id="campo1" name="campo1" value="" placeholder="Ingrese campo 1">
+                                <label>Campo 2</label>
+                                <input type="text" id="campo2" name="campo2" value="" placeholder="Ingrese campo 2">
+                            </div>
+                        </li>
+                        
+                        <li class="liOption">
+                            <a href="#"><i class="fa fa-tree fa-fw"></i>Vegetación<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cargarCapasVegetacion">
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                        <li class="liOption">
+                            <a href="#"><i class="fa fa-road fa-fw"></i>Vial<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cargarCapasVial">
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        
+                        <li class="liOption">
+                            <a href="#"><i class="fa fa-dollar fa-fw"></i>Politicas<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cargarCapasPoliticas">
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        
+                        <li class="liOption">
+                            <a href="#"><i class="fa fa-life-bouy fa-fw"></i>Hidricas<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cargarCapasHidricas">
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        
+                        <li class="liOption">
+                            <a href="#"><i class="fa fa-dashboard fa-fw"></i>Actividades<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cargarCapasActividades">
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        
+                        <li class="liOption">
+                            <a href="#"><i class="fa fa-home fa-fw"></i>Infraestructuras<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cargarCapasInfraestructuras">
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        
+                        <li class="liOption">
+                            <a href="#"><i class="fa fa-globe fa-fw"></i>Suelos<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cargarCapasSuelos">
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+			<li class="liOption">
+                            <a href="#"><i class="fa fa-globe fa-fw"></i>Editable<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cargarCapaEditable">
+				    <input style="margin-right: 20px" type="checkbox" id="check_layer_edit">
+				    <label text="Editable">Editable</label>
+
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+    </div>
+    <div id="map" class="map">
+    </div>
+
+    
+
+
+    
+
+
+    <!-- jQuery -->
+    <!-- <script src="../vendor/jquery/jquery.min.js"></script> -->
+    <script src="{% static 'staticfilesjosi/vendor/jquery/jquery.min.js' %}"></script>
+
+	<!-- funciones.js -->
+    <script src="{% static 'staticfilesjosi/js/functions.js' %}"></script>
+    <!-- <script src="../js/functions.js"></script> -->
+
+    
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'staticfilesjosi/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- <script src="../vendor/bootstrap/js/bootstrap.min.js"></script> -->
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'staticfilesjosi/vendor/metisMenu/metisMenu.min.js' %}"></script>
+    <!-- <script src="../vendor/metisMenu/metisMenu.min.js"></script> -->
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'staticfilesjosi/dist/js/sb-admin-2.js' %}"></script>
+    <!-- <script src="../dist/js/sb-admin-2.js"></script> -->
+
+    <script type="text/javascript">
+
+     var vectorSourceGeojson = new ol.source.Vector({
+         //formato de los datos a consumir
+         format: new ol.format.GeoJSON(),
+         //url del archivo o script que genera el GeoJSON
+         url:'http://localhost:8001/mostrarcapa'
+     });
+     var vectorLayerGeojson = new ol.layer.Vector({
+         //asigno el source
+         source: vectorSourceGeojson,
+         visible:false,
+
+         //estilo
+	 style: new ol.style.Style({
+	     //relleno (solo si hay poligonos)
+	     fill: new ol.style.Fill({
+		 color: 'rgba(255, 204, 51, 0.4)'
+	     }),
+	     //trazo (para poligonos y lineas)
+	     stroke: new ol.style.Stroke({
+		 color: '#ffcc33',
+		 width: 2
+	     }),
+	     //image: para puntos
+	     image: new ol.style.Circle({
+		 radius: 7,//radio en pixeles
+		 //relleno
+		 fill: new ol.style.Fill({
+		     color: '#ffcc33'
+		 }),
+		 //trazo
+		 stroke: new ol.style.Stroke({
+		     color: '#000000',
+		     width: 1
+		 })
+	     })
+	 })
+     });
+
+     //////////////////////////////////CAPAS///////////////////////////////////////////
+
+     //Cargo la lista de las Capas en el SIDEBAR
+     for(var i=0; i<capas.length; i++) {
+         var x;
+         if (capas[i].tipo == 'vegetacion') {
+             x = $( "#cargarCapasVegetacion" );
+         } else if(capas[i].tipo == 'suelos'){
+             x = $( "#cargarCapasSuelos" );
+         } else if(capas[i].tipo == 'infraestructura'){
+             x = $( "#cargarCapasInfraestructuras" );
+         } else if(capas[i].tipo == 'hidrico'){
+             x = $( "#cargarCapasHidricas" );
+         } else if(capas[i].tipo == 'politico') {
+             x = $( "#cargarCapasPoliticas" );
+         } else if(capas[i].tipo == 'actividades'){
+             x = $( "#cargarCapasActividades" );
+         } else {  x = $( "#cargarCapasVial" );;}
+
+         x.append(  $('<input>', {
+             style: 'margin-right: 20px',
+             type: 'checkbox',
+             capa: i,
+             name: capas[i].nombre,
+             id:'check_layer_'+i,
+         }
+         )
+         );  
+
+         x.append(   $('<label>', {
+             for: 'check_layer_'+i,
+             text: capas[i].nombre,
+         }
+         )
+             
+         );  
+         x.append("</br>");
+     }
+
+     //Obtengo las Capas del Servicio WMS.    
+
+     for(var i=0;i<capas.length;i++){
+         capasdelmapa.push(new ol.layer.Image({
+             title: capas[i].nombre ,
+             idx:i,
+             //capa desactivada por defecto
+             visible: false,
+             source: new ol.source.ImageWMS({
+		 /* Cambiar conexiones de final-project-2.qgs*/
+                 url: 'http://localhost:9999/?map=/home/cactus/Devel/GIS/dockerfiles/qgis/final-project.qgs',
+                 /* url: '/cgi-bin/qgis_mapserv.fcgi?map=/var/www/html/tpfinal.qgs',*/
+                 params: {LAYERS: capas[i].layer, VERSION: '1.1.1'}
+             })
+         })
+         );
+     }
+
+
+     //////////////////////////////////MAPA BASE/////////////////////////////////////////////
+     //creo una capa de tipo vector
+     var source = new ol.source.Vector();
+
+     var styleFunction = function(feature) {
+         var geometry = feature.getGeometry();
+         var styles = [
+             // linestring
+             new ol.style.Style({
+                 stroke: new ol.style.Stroke({
+                     color: '#ffcc33',
+                     width: 2
+                 })
+             })
+         ];
+
+         geometry.forEachSegment(function(start, end) {
+             var dx = end[0] - start[0];
+             var dy = end[1] - start[1];
+             var rotation = Math.atan2(dy, dx);
+         });
+
+         return styles;
+     };
+     var vector = new ol.layer.Vector({
+         source: source,
+         style: styleFunction
+     });
+
+     //Obtengo el Mapa Base de URL externa
+     var scaleLineControl = new ol.control.ScaleLine();    
+     var map = new ol.Map({
+         target: 'map',
+         layers: [
+             new ol.layer.Tile({
+                 title: "Natural Earth Base Map",
+                 source: new ol.source.TileWMS({
+                     url: 'http://demo.boundlessgeo.com/geoserver/wms',
+                     params: {LAYERS: 'ne:ne', VERSION: '1.1.1'}
+                 })
+             }),
+             vector,
+	     vectorLayerGeojson,
+         ],
+         controls: ol.control.defaults({
+             attributionOptions:({
+                 collapsible: false
+             })
+         }).extend([
+             scaleLineControl
+         ]),
+         view: new ol.View({
+             projection: 'EPSG:4326',
+             center: [-65,-35],
+             zoom: 4
+
+         })
+         
+     });
+
+     //Agrego las capas al mapa
+     for(var i=0;i<capas.length;i++){
+         map.addLayer(capasdelmapa[i]);
+     }
+
+
+
+     /////////////////////////////////CONTROLES///////////////////////////////////////////
+     //Intancio control de tipo vector
+     var multilineas = new ol.interaction.Draw({
+         source: source,
+         type: ('LineString')
+     });
+
+
+     //Instancio Tipo de Consulta DRAGBOX
+     var selectInteraction = new ol.interaction.DragBox(
+         {
+             condition: ol.events.condition.always, //noModifierKeys
+             style: new ol.style.Style({
+                 stroke: new ol.style.Stroke({
+                     color: [0, 0, 255, 1]
+                 })
+             })
+         }
+     );
+
+     //Instancio Control Dibujar
+     var draw = new ol.interaction.Draw({
+         condition: ol.events.condition.always,
+         //  source: vectorSource,
+         type: 'Polygon',
+         //geometryFunction: geometryFunction,
+         //maxPoints: maxPoints
+     });
+
+
+     //Funcion para evento DRAWBOX
+     selectInteraction.on('boxend', function (evt) {
+         //this: referencia al selectInteraction
+         console.log('pepito', this.getGeometry().getCoordinates());
+         consultar(selectInteraction.getGeometry().getCoordinates());
+     });
+
+     draw.on('drawend',function(evt){
+         //console.log(evt.feature.getGeometry().getCoordinates())
+         var feature = evt.feature;
+         var geometry = feature.getGeometry().getCoordinates();
+         cargarCapa(geometry)
+     });
+
+     //funcion para el evento click en el mapa
+     var clickEnMapa = function (evt) {
+         //muestro por consola las coordenadas del evento
+         consultar(evt.coordinate);
+     }
+
+     var clickEnMapaCrearCapa = function (evt) {
+         //muestro por consola las coordenadas del evento
+         cargarCapa(evt.coordinate);
+     }
+
+
+
+
+     //Agrego interacciones de los controles
+     function seleccionarControl(dato) {
+
+         if (dato == "dibujarPoly") {
+             map.addInteraction(draw);
+             map.removeInteraction(selectInteraction);
+             map.un('click', clickEnMapa);
+             map.un('click', clickEnMapaCrearCapa);
+         } else 
+         if (dato == "navegar") {
+             map.removeInteraction(draw);
+             map.removeInteraction(selectInteraction);
+             map.un('click', clickEnMapa);
+             map.un('click', clickEnMapaCrearCapa);
+         } else 
+         if (dato == "consultar") {
+             map.addInteraction(selectInteraction);
+             map.on('click', clickEnMapa);
+             map.un('click', clickEnMapaCrearCapa);
+             map.removeInteraction(draw)                  
+         } else 
+         if (dato == "dibujarPunto") {
+             map.removeInteraction(selectInteraction);
+             map.on('click', clickEnMapaCrearCapa);
+             map.un('click', clickEnMapa);
+             map.removeInteraction(draw);
+         };
+     };
+
+
+     //////////////////////////////////CHECKBOX PARA CAPAS//////////////////////////////////
+     //Hacer Visible una Capa cuando activo CHECKBOX
+
+     var checkbox_editable = document.getElementById('check_layer_edit');
+     checkbox_editable.addEventListener('change', function () {
+         var checked = this.checked;
+         //seteo la propiedad "visible" de mi capa en función al valor
+         if (checked !== vectorLayerGeojson.getVisible()) {
+             vectorLayerGeojson.setVisible(checked);
+         }
+     });
+
+     
+     
+     var checkbox = [];
+     for (var i=0; i<capas.length; i++) {
+         
+         checkbox[i] = document.getElementById('check_layer_'+i);
+         checkbox[i].addEventListener('change', function() {
+             var checked = this.checked;
+
+             var index=this.getAttribute("capa");
+
+             if (checked !== capasdelmapa[index].getVisible() ) {
+                 capasdelmapa[index].setVisible(checked);
+             }
+
+         });
+
+         capasdelmapa[i].on('change:visible', function() {
+             var visible = this.getVisible();
+             var idx=this.get("idx")
+             if (visible !== checkbox[idx].checked) {
+                 checkbox[idx].checked = visible;
+
+             }
+         });
+     }
+
+
+     
+
+
+
+     
+    </script>
+        
+
+    
+
+</body>
+
+</html>
+
